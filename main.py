@@ -9,7 +9,7 @@ pygame.init()
 clock = pygame.time.Clock()
 
 balls = []
-ball_count = 10
+ball_count = 30
 initialise = 0
 
 while True:
@@ -35,7 +35,6 @@ while True:
             rng_b = random.randint(0, 255)
 
             ball = Vertex(pygame.Vector2(rng_width, rng_height), 1, rng_x, rng_y, 0, rng_rad, (rng_r, rng_g, rng_b))
-
             balls.append(ball)
         initialise = 1
 
@@ -45,6 +44,7 @@ while True:
     for ball in balls:
         ball.check_collision(balls)
         ball.run(dt)
-        ball.velocity_pointer()
+        #ball.velocity_pointer()
+        #print(ball.x_velocity)
 
     pygame.display.flip()

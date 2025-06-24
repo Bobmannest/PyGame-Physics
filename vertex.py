@@ -9,7 +9,7 @@ green = (0, 255, 0)
 #Vertex is the planned name for the edge of the cube but for now its justa  ball shape
 class Vertex:
     air_res = 1
-    bounciness = 0.5
+    bounciness = 0.2
     def __init__(self, center: Vec2, mass: int, x_velocity: int, y_velocity: int, direction: int, radius: int, color: tuple):
         self.center = center
         self.mass = mass
@@ -65,29 +65,29 @@ class Vertex:
             if distance <= self.radius + ball.get_radius():
                 if dx > 0:
                     self.center.x += 1
-                    self.x_velocity = -self.x_velocity
-                    self.x_velocity -= dx * Vertex.bounciness
+                    self.x_velocity = int(0.8 * -self.x_velocity)
+                    #self.x_velocity -= dx * Vertex.bounciness
                 elif dx < 0:
                     self.center.x -= 1
-                    self.x_velocity = -self.x_velocity
-                    self.x_velocity += dx * Vertex.bounciness
+                    self.x_velocity = int(0.8 * -self.x_velocity)
+                    #self.x_velocity += dx * Vertex.bounciness
 
                 if dy > 0:
                     self.center.y += 1
                     self.y_velocity = -self.y_velocity
                     self.y_velocity //= 2
-                    self.y_velocity -= dy * Vertex.bounciness
+                    #self.y_velocity -= dy * Vertex.bounciness
                 elif dy < 0:
                     self.center.y -= 1
                     self.y_velocity = -self.y_velocity
                     self.y_velocity //= 2
-                    self.y_velocity += dy * Vertex.bounciness
+                    #self.y_velocity += dy * Vertex.bounciness
 
     #When mouse clicks, balls follow
     def move_to_mouse(self):
         x, y = pygame.mouse.get_pos()
-        self.x_velocity = x - self.center.x
-        self.y_velocity = y - self.center.y
+        self.x_velocity = int(x - self.center.x)
+        self.y_velocity = int(y - self.center.y)
 
     #Pointer that shows direction of velocity but also the size of the line is the speed magnitude
     def velocity_pointer(self):

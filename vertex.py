@@ -1,21 +1,25 @@
+import math
 import pygame
 from pygame import Vector2 as Vec2
 from screen import screen, scr_height, scr_width
 
 #Colors
-red = (168, 50, 50)
 green = (0, 255, 0)
 
 #Vertex is the planned name for the edge of the cube but for now its justa  ball shape
 class Vertex:
     air_res = 1
-    def __init__(self, center: Vec2, mass: int, x_velocity: int, y_velocity: int, direction: int, radius: int):
+    bounciness = 0.5
+    def __init__(self, center: Vec2, mass: int, x_velocity: int, y_velocity: int, direction: int, radius: int, color: tuple):
         self.center = center
         self.mass = mass
+        #Mass is equal to πr^2 since im keeping density constant
+        self.mass = int(0.08 * (radius^2) * math.pi)
         self.x_velocity = x_velocity
         self.y_velocity = y_velocity
         self.direction = direction
         self.radius = radius
+        self.color = color
 
     #Gravity indefinitely increases the downwards speed. 10(9.81 rounded) is too large, so I went with 1 instead
     def run(self, dt):
@@ -50,8 +54,36 @@ class Vertex:
             self.y_velocity = -self.y_velocity
 
         #Draws the circle
-        pygame.draw.circle(screen, red, self.center, self.radius)
+        pygame.draw.circle(screen, self.color, self.center, self.radius)
 
+    #Checks collisions between the balls
+    def check_collision(self, balls):
+        for ball in balls:
+            dx = self.center.x - ball.center.x
+            dy = self.center.y - ball.center.y
+            distance = math.hypot(dx, dy)
+            if distance <= self.radius + ball.get_radius():
+                if dx > 0:
+                    self.center.x += 1
+                    self.x_velocity = -self.x_velocity
+                    self.x_velocity -= dx * Vertex.bounciness
+                elif dx < 0:
+                    self.center.x -= 1
+                    self.x_velocity = -self.x_velocity
+                    self.x_velocity += dx * Vertex.bounciness
+
+                if dy > 0:
+                    self.center.y += 1
+                    self.y_velocity = -self.y_velocity
+                    self.y_velocity //= 2
+                    self.y_velocity -= dy * Vertex.bounciness
+                elif dy < 0:
+                    self.center.y -= 1
+                    self.y_velocity = -self.y_velocity
+                    self.y_velocity //= 2
+                    self.y_velocity += dy * Vertex.bounciness
+
+    #When mouse clicks, balls follow
     def move_to_mouse(self):
         x, y = pygame.mouse.get_pos()
         self.x_velocity = x - self.center.x
@@ -63,3 +95,17 @@ class Vertex:
 
     def print_speed(self):
         print('H:', self.x_velocity, 'V:', self.y_velocity)
+
+    #Getter
+    def get_center(self):
+        return self.center
+
+    def get_radius(self):
+        return self.radius
+
+    #Setter
+    def add_center_x(self, add):
+        self.center.x += add
+
+    def add_center_y(self, add):
+        self.center.y += add

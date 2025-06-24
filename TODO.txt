@@ -1,0 +1,4 @@
+TODO
+
+- Add so that balls bounce off eachother depending on mass of current and other ball
+    eg)If ball with smaller mass collides with ball with higher mass, one with smaller mass bounces off more

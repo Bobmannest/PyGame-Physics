@@ -1,5 +1,5 @@
 import pygame
-def events_setup(v, balls):
+def events_setup(balls):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()

@@ -7,9 +7,10 @@ from screen import screen, scr_height, scr_width
 green = (0, 255, 0)
 
 #Vertex is the planned name for the edge of the cube but for now its justa  ball shape
-class Vertex:
+class Ball:
     air_res = 1
     bounciness = 0.2
+    mouse_follow_intensity = 1.2
     def __init__(self, center: Vec2, mass: int, x_velocity: int, y_velocity: int, direction: int, radius: int, color: tuple):
         self.center = center
         self.mass = mass
@@ -65,29 +66,25 @@ class Vertex:
             if distance <= self.radius + ball.get_radius():
                 if dx > 0:
                     self.center.x += 1
-                    self.x_velocity = int(0.8 * -self.x_velocity)
-                    #self.x_velocity -= dx * Vertex.bounciness
+                    self.x_velocity = int(0.8 * abs(self.x_velocity))
                 elif dx < 0:
                     self.center.x -= 1
-                    self.x_velocity = int(0.8 * -self.x_velocity)
-                    #self.x_velocity += dx * Vertex.bounciness
+                    self.x_velocity = int(0.8 * -abs(self.x_velocity))
 
                 if dy > 0:
                     self.center.y += 1
-                    self.y_velocity = -self.y_velocity
+                    self.y_velocity = abs(self.y_velocity)
                     self.y_velocity //= 2
-                    #self.y_velocity -= dy * Vertex.bounciness
                 elif dy < 0:
                     self.center.y -= 1
-                    self.y_velocity = -self.y_velocity
+                    self.y_velocity = -abs(self.y_velocity)
                     self.y_velocity //= 2
-                    #self.y_velocity += dy * Vertex.bounciness
 
     #When mouse clicks, balls follow
     def move_to_mouse(self):
         x, y = pygame.mouse.get_pos()
-        self.x_velocity = int(x - self.center.x)
-        self.y_velocity = int(y - self.center.y)
+        self.x_velocity = int(x - self.center.x) * Ball.mouse_follow_intensity
+        self.y_velocity = int(y - self.center.y) * Ball.mouse_follow_intensity
 
     #Pointer that shows direction of velocity but also the size of the line is the speed magnitude
     def velocity_pointer(self):

@@ -8,9 +8,10 @@ green = (0, 255, 0)
 
 #Vertex is the planned name for the edge of the cube but for now its justa  ball shape
 class Ball:
+    gravity = 10
     air_res = 1
     bounciness = 0.2
-    mouse_follow_intensity = 1.2
+    mouse_follow_intensity = 1
     def __init__(self, center: Vec2, mass: int, x_velocity: int, y_velocity: int, direction: int, radius: int, color: tuple):
         self.center = center
         self.mass = mass
@@ -25,7 +26,7 @@ class Ball:
     #Gravity indefinitely increases the downwards speed. 10(9.81 rounded) is too large, so I went with 1 instead
     def run(self, dt):
         #Gravity(mg)
-        self.y_velocity += self.mass * 10
+        self.y_velocity += self.mass * Ball.gravity
 
         #Horizontal air resistance
         if self.x_velocity > 0:

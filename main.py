@@ -11,7 +11,7 @@ pygame.init()
 clock = pygame.time.Clock()
 
 balls = []
-ball_count = 50
+ball_count = 12
 initialise = 0
 
 while True:

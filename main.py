@@ -11,13 +11,13 @@ pygame.init()
 clock = pygame.time.Clock()
 
 balls = []
-ball_count = 25
+ball_count = 20
 initialise = 0
 
 while True:
     dt = clock.tick(30) / 1000
     if initialise == 0:
-        v = Ball(pygame.Vector2(100, 250), 1, 0, 100, 0, 7, (168, 50, 50))
+        v = Ball(pygame.Vector2(100, 250), 0, 100, 0, 7, (168, 50, 50))
         balls.append(v)
         for _ in range(ball_count):
             #Randomness
@@ -35,7 +35,7 @@ while True:
             rng_g = random.randint(0, 255)
             rng_b = random.randint(0, 255)
 
-            ball = Ball(pygame.Vector2(rng_width, rng_height), 1, rng_x, rng_y, 0, rng_rad, (rng_r, rng_g, rng_b))
+            ball = Ball(pygame.Vector2(rng_width, rng_height), rng_x, rng_y, 0, rng_rad, (rng_r, rng_g, rng_b))
             balls.append(ball)
         initialise = 1
 
@@ -46,6 +46,6 @@ while True:
         ball.check_collision(balls)
         ball.run(dt)
         #ball.velocity_pointer()
-        #print(ball.x_velocity)
+        #print('X:', ball.x_velocity, 'Y:', ball.y_velocity)
 
     pygame.display.flip()

@@ -11,10 +11,10 @@ class Ball:
     gravity = 10
     air_res = 1
     bounciness = 0.2
+    friction = 0.8
     mouse_follow_intensity = 1
-    def __init__(self, center: Vec2, mass: int, x_velocity: int, y_velocity: int, direction: int, radius: int, color: tuple):
+    def __init__(self, center: Vec2, x_velocity: int, y_velocity: int, direction: int, radius: int, color: tuple):
         self.center = center
-        self.mass = mass
         #Mass is equal to πr^2 since im keeping density constant
         self.mass = int(0.08 * (radius^2) * math.pi)
         self.x_velocity = x_velocity
@@ -64,14 +64,14 @@ class Ball:
             dx = self.center.x - ball.center.x
             dy = self.center.y - ball.center.y
             distance = math.hypot(dx, dy)
+
             if distance <= self.radius + ball.get_radius():
                 if dx > 0:
                     self.center.x += 1
-                    self.x_velocity = int(0.8 * abs(self.x_velocity))
+                    self.x_velocity = int(Ball.friction * abs(self.x_velocity))
                 elif dx < 0:
                     self.center.x -= 1
-                    self.x_velocity = int(0.8 * -abs(self.x_velocity))
-
+                    self.x_velocity = int(Ball.friction * -abs(self.x_velocity))
                 if dy > 0:
                     self.center.y += 1
                     self.y_velocity = abs(self.y_velocity)

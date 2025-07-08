@@ -12,32 +12,40 @@ clock = pygame.time.Clock()
 
 balls = []
 ball_count = 25
-initialise = 0
+init = True
+
+
+def biased_radius_generator():
+    random_radius = random.randint(1, 8)
+    if random_radius == 8:
+        random_biased_radius = random.randint(10, 20)
+    else:
+        random_biased_radius = random.randint(7, 10)
+    return random_biased_radius
+
 
 while True:
     dt = clock.tick(30) / 1000
-    if initialise == 0:
+    if init:
         v = Ball(pygame.Vector2(100, 250), 0, 100, 0, 7, (168, 50, 50))
         balls.append(v)
         for _ in range(ball_count):
-            #Randomness
-            rng_width = random.randint(7, scr_width - 7)
-            rng_height = random.randint(7, scr_height - 7)
-            rng_x = random.randint(-300, 300)
-            rng_y = random.randint(-300, 300)
-            # RNG that favours smaller balls
-            rng_rad = random.randint(1, 8)
-            if rng_rad == 8:
-                rng_rad = random.randint(10, 20)
-            else:
-                rng_rad = random.randint(7, 10)
-            rng_r = random.randint(0, 255)
-            rng_g = random.randint(0, 255)
-            rng_b = random.randint(0, 255)
-
-            ball = Ball(pygame.Vector2(rng_width, rng_height), rng_x, rng_y, 0, rng_rad, (rng_r, rng_g, rng_b))
+            # Creates balls with random stats
+            random_x = random.randint(7, scr_width - 7)
+            random_y = random.randint(7, scr_height - 7)
+            random_x_velocity = random.randint(-300, 300)
+            random_y_velocity = random.randint(-300, 300)
+            direction = 0
+            random_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            ball = Ball(
+                pygame.Vector2(random_x, random_y),
+                random_x_velocity,
+                random_y_velocity,
+                direction,
+                biased_radius_generator(),
+                random_color)
             balls.append(ball)
-        initialise = 1
+        init = False
 
     events_setup(balls)
 
@@ -45,7 +53,7 @@ while True:
     for ball in balls:
         ball.check_collision(balls)
         ball.run(dt)
+        #Optional stats monitoring methods
         #ball.velocity_pointer()
         #print('X:', ball.x_velocity, 'Y:', ball.y_velocity)
-
     pygame.display.flip()
